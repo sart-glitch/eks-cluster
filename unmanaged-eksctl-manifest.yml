@@ -1,0 +1,209 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+
+metadata:
+  name: SS-Network-Prod
+  region: ap-south-1
+  version: "1.21"
+
+
+vpc:
+  subnets:
+    public:
+      SS-Network-Prod-Pub-1a:
+        id: "subnet-08bf0fb"
+      SS-Network-Prod-Pub-1b:
+        id: "subnet-0baa54b"
+      SS-Network-Prod-Pub-1c:
+        id: "subnet-078182e9"
+    private:
+      SS-Network-Prod-Pvt-1a:
+        id: "subnet-0c3c64e1"
+      SS-Network-Prod-Pvt-1b:
+        id: "subnet-027286d6"
+      SS-Network-Prod-Pvt-1c:
+        id: "subnet-06c0130b"
+
+
+
+managedNodeGroups:
+
+- name: SS-Network-Prod-App-NG-1
+  ami: ami-0c6be64e9e
+  overrideBootstrapCommand: |
+    #!/bin/bash
+    /etc/eks/bootstrap.sh SS-Network-Prod --container-runtime containerd
+  minSize: 1
+  maxSize: 2
+  desiredCapacity: 1
+  instanceType: "m5.large"
+  volumeSize: 50
+  volumeEncrypted: true
+  volumeKmsKeyID: 4038ee61-d309-4bfe-b96c-9e3c1b7c4fbd
+  privateNetworking: true
+  subnets:
+  - SS-Network-Prod-Pvt-1a
+  - SS-Network-Prod-Pvt-1b
+  - SS-Network-Prod-Pvt-1c
+  labels: {role: Prod-App-NG-1}
+  ssh:
+    publicKeyName: SS-Network-Prod-NG-Keypair
+  tags:
+    nodegroup-role: Prod-App-NG-1
+    nodegroup-name: Prod-App-NG-1
+    Project: SS-Network
+    Env: Prod
+    Layer: App
+    Managedby: Workmates
+  iam:
+    attachPolicyARNs:
+    - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
+    - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
+    - arn:aws:iam::aws:policy/ElasticLoadBalancingFullAccess
+    - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
+    - arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy
+    withAddonPolicies:
+      autoScaler: true
+      externalDNS: true
+      certManager: true
+      ebs: true
+      efs: true
+      albIngress: true
+      cloudWatch: true
+
+- name: SS-Network-Prod-App-NG-2
+
+  ami: ami-0c6be64e9e
+  overrideBootstrapCommand: |
+    #!/bin/bash
+    /etc/eks/bootstrap.sh SS-Network-Prod --container-runtime containerd
+  minSize: 1
+  maxSize: 2
+  desiredCapacity: 1
+  instanceType: "m5.xlarge"
+  volumeSize: 50
+  volumeEncrypted: true
+  volumeKmsKeyID: 4038ee61-d309-4bfe-b96c-9e3c1b7c4fbd
+  privateNetworking: true
+  subnets:
+  - SS-Network-Prod-Pvt-1a
+  - SS-Network-Prod-Pvt-1b
+  - SS-Network-Prod-Pvt-1c
+  labels: {role: Prod-App-NG-2}
+  ssh:
+    publicKeyName: SS-Network-Prod-NG-Keypair
+  tags:
+    nodegroup-role: Prod-App-NG-2
+    nodegroup-name: Prod-App-NG-2
+    Project: SS-Network
+    Env: Prod
+    Layer: App
+    Managedby: Workmates
+  iam:
+    attachPolicyARNs:
+    - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
+    - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
+    - arn:aws:iam::aws:policy/ElasticLoadBalancingFullAccess
+    - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
+    - arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy
+    withAddonPolicies:
+      autoScaler: true
+      externalDNS: true
+      certManager: true
+      ebs: true
+      efs: true
+      albIngress: true
+      cloudWatch: true
+
+- name: SS-Network-Prod-Redis-NG
+
+
+  ami: ami-0c6be64e9e
+  overrideBootstrapCommand: |
+    #!/bin/bash
+    /etc/eks/bootstrap.sh SS-Network-Prod --container-runtime containerd
+  minSize: 1
+  maxSize: 2
+  desiredCapacity: 1
+  instanceType: "r5.large"
+  volumeSize: 50
+  volumeEncrypted: true
+  volumeKmsKeyID: 4038ee61-d309-4bfe-b96c-9e3c1b7c4fbd
+  privateNetworking: true
+  subnets:
+  - SS-Network-Prod-Pvt-1a
+  - SS-Network-Prod-Pvt-1b
+  - SS-Network-Prod-Pvt-1c
+  labels: {role: Prod-Redis-NG}
+  ssh:
+    publicKeyName: SS-Network-Prod-NG-Keypair
+  tags:
+    nodegroup-role: Prod-Redis-NG
+    nodegroup-name: Prod-Redis-NG
+    Project: SS-Network
+    Env: Prod
+    Layer: Redis
+    Managedby: Workmates
+  iam:
+    attachPolicyARNs:
+    - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
+    - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
+    - arn:aws:iam::aws:policy/ElasticLoadBalancingFullAccess
+    - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
+    - arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy
+    withAddonPolicies:
+      autoScaler: true
+      externalDNS: true
+      certManager: true
+      ebs: true
+      efs: true
+      albIngress: true
+      cloudWatch: true
+
+- name: SS-Network-Prod-Monitoring-NG
+
+  ami: ami-0c6be64e
+  overrideBootstrapCommand: |
+    #!/bin/bash
+    /etc/eks/bootstrap.sh SS-Network-Prod --container-runtime containerd
+  minSize: 1
+  maxSize: 2
+  desiredCapacity: 1
+  instanceType: "m5a.large"
+  volumeSize: 50
+  volumeEncrypted: true
+  volumeKmsKeyID: 4038ee61-d309-4bfe-b96c-9e3c1b7c4fbd
+  privateNetworking: true
+  subnets:
+  - SS-Network-Prod-Pvt-1a
+  - SS-Network-Prod-Pvt-1b
+  - SS-Network-Prod-Pvt-1c
+  labels: {role: Prod-Monitoring-NG}
+  ssh:
+    publicKeyName: SS-Network-Prod-NG-Keypair
+  tags:
+    nodegroup-role: Prod-Monitoring-NG
+    nodegroup-name: Prod-Monitoring-NG
+    Project: SS-Network
+    Env: Prod
+    Layer: Monitoring
+    Managedby: Workmates
+  iam:
+    attachPolicyARNs:
+    - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
+    - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
+    - arn:aws:iam::aws:policy/ElasticLoadBalancingFullAccess
+    - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
+    - arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy
+    withAddonPolicies:
+      autoScaler: true
+      externalDNS: true
+      certManager: true
+      ebs: true
+      efs: true
+      albIngress: true
+      cloudWatch: true
+
+secretsEncryption:
+  keyARN: arn:aws:kms:ap-south-1:123456789:key/4038ee61-d309-4bfe-b96c-9e3c1b7c4fbd
