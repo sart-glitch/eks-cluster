@@ -19,3 +19,9 @@ a sufficient number IP addresses are available, based on needs
 --routing tables have correct entries and the network is functional
    NEW: all public subnets should have the property MapPublicIpOnLaunch enabled (i.e. Auto-assign public IPv4 address in the AWS console)
 There may be other requirements imposed by EKS or Kubernetes, and it is entirely up to you to stay up-to-date on any requirements and/or recommendations, and implement those as needed/possible.
+
+-------------------------
+subnets are tagged with at least the following:
+kubernetes.io/cluster/<name> tag set to either shared or owned                 kubernetes.io/cluster/sarthak-cluster   owned
+kubernetes.io/role/internal-elb tag set to 1 for private subnets               kubernetes.io/role/internal-elb 1   ---> private subnets
+kubernetes.io/role/elb tag set to 1 for public subnets                         kubernetes.io/role/elb 1             ---> public subnets
