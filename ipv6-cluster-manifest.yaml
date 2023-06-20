@@ -1,0 +1,88 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+
+metadata:
+  name: IPV6-cluster
+  region: ap-south-1
+  version: "1.23"
+kubernetesNetworkConfig:
+  ipFamily: IPv6
+
+
+vpc:
+  id: "vpc-0780cd1389cef06f4"
+  subnets:
+    public:
+      IPV6-Pub-1a:
+        id: "subnet-00f62bed7b1e9e01f"
+        region: "ap-south-1a"
+      IPV6-Pub-1b:
+        id: "subnet-07b6c694a11a7472a"
+        region: "ap-south-1b"
+      IPV6-Pub-1c:
+        id: "subnet-04d854e96f53b7a9f"
+        region: "ap-south-1c"
+    private:
+      IPV6-Pvt-1a:
+        id: "subnet-07ee1b5f0a88f6189"
+        region: "ap-south-1a"
+      IPV6-Pvt-1b:
+        id: "subnet-0c81a85baeb2641e5"
+        region: "ap-south-1b"
+      IPV6-Pvt-1c:
+        id: "subnet-0c0ef0113339ad410"
+        region: "ap-south-1c"
+     
+addons: 
+  - name: vpc-cni 
+    version: latest 
+  - name: coredns 
+    version: latest 
+  - name: kube-proxy 
+
+
+managedNodeGroups:
+  - name: IPV6-NG-1
+    ami: ami-0d9c28c76ecc3d211
+    amiFamily: AmazonLinux2
+    overrideBootstrapCommand: |
+      #!/bin/bash
+      /etc/eks/bootstrap.sh IPV6-cluster --container-runtime containerd
+    minSize: 1
+    maxSize: 2
+    desiredCapacity: 1
+    instanceType: "t3a.medium"
+    volumeSize: 20
+    privateNetworking: true
+    subnets:
+      - IPV6-Pvt-1a
+      - IPV6-Pvt-1b
+      - IPV6-Pvt-1c
+    labels: {role: IPV6-NG-1}
+    ssh:
+      publicKeyName: IPV6-NG-Keypair
+    tags:
+      nodegroup-role: IPV6-NG-1
+      nodegroup-name: IPV6-NG-1
+      Project: IPV6
+      Env: Dev-Stag
+      Layer: App
+      Managedby: Workmates
+    iam:
+      attachPolicyARNs:
+        - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
+        - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
+        - arn:aws:iam::aws:policy/ElasticLoadBalancingFullAccess
+        - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
+        - arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy
+      withAddonPolicies:
+        autoScaler: true
+        externalDNS: true
+        certManager: true
+        ebs: true
+        efs: true
+        albIngress: true
+        cloudWatch: true
+iam:
+  withOIDC: true
