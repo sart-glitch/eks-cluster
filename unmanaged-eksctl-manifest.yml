@@ -40,7 +40,7 @@ managedNodeGroups:
   instanceType: "m5.large"
   volumeSize: 50
   volumeEncrypted: true
-  volumeKmsKeyID: 4038ee61-d309-4bfe-b96c-9e3c1b7c4fbd
+  volumeKmsKeyID: 4038ee61-b7c4fbd
   privateNetworking: true
   subnets:
   - SS-Network-Prod-Pvt-1a
@@ -84,7 +84,7 @@ managedNodeGroups:
   instanceType: "m5.xlarge"
   volumeSize: 50
   volumeEncrypted: true
-  volumeKmsKeyID: 4038ee61-d309-4bfe-b96c-9e3c1b7c4fbd
+  volumeKmsKeyID: 4038ee61c4fbd
   privateNetworking: true
   subnets:
   - SS-Network-Prod-Pvt-1a
@@ -129,7 +129,7 @@ managedNodeGroups:
   instanceType: "r5.large"
   volumeSize: 50
   volumeEncrypted: true
-  volumeKmsKeyID: 4038ee61-d309-4bfe-b96c-9e3c1b7c4fbd
+  volumeKmsKeyID: 4038ee61-b7c4fbd
   privateNetworking: true
   subnets:
   - SS-Network-Prod-Pvt-1a
@@ -173,7 +173,7 @@ managedNodeGroups:
   instanceType: "m5a.large"
   volumeSize: 50
   volumeEncrypted: true
-  volumeKmsKeyID: 4038ee61-d309-4bfe-b96c-9e3c1b7c4fbd
+  volumeKmsKeyID: 4038ee61-d37c4fbd
   privateNetworking: true
   subnets:
   - SS-Network-Prod-Pvt-1a
@@ -206,4 +206,4 @@ managedNodeGroups:
       cloudWatch: true
 
 secretsEncryption:
-  keyARN: arn:aws:kms:ap-south-1:123456789:key/4038ee61-d309-4bfe-b96c-9e3c1b7c4fbd
+  keyARN: arn:aws:kms:ap-south-1:123456789:key/4038ee61e3c1b7c4fbd
